@@ -118,6 +118,7 @@ async function loadMoreImages() {
   // якщо в масиві є обʼєкти картинок, то виводимо їх
   if (arrayOfResults.length > 0) {
     layOut(arrayOfResults);
+    lightbox.refresh();
   }
 
   // якщо масив порожній, то виводимо повідомлення, що збігів не знайдено
@@ -161,11 +162,13 @@ function layOut(data) {
       item =>
         `<div class="photo-card">
               <a href="${item.largeImageURL}">      
-                <img
+              <div class="thumb">  
+              <img
                 src="${item.webformatURL}"
                 alt=" ${item.webformatURL}"
                 loading="lazy"
                 />
+                </div>
               </a>
               <div class="info">
                 <p class="info-item"><b>Likes</b><br> ${item.likes}</p>

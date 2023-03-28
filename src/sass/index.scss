@@ -31,7 +31,7 @@ p {
   width: 100%;
   margin: 0 auto;
   padding: 0 15px;
-  outline: 2px solid tomato;
+  // outline: 2px solid tomato;
 }
 
 /*----MAIN COMPONENTS----*/
@@ -49,7 +49,7 @@ p {
 }
 
 .layout {
-  background-color: aquamarine;
+  // background-color: aquamarine;
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -65,15 +65,12 @@ p {
 .gallery {
   display: flex;
   flex-wrap: wrap;
+  gap: 15px;
 }
 
 .photo-card {
-  width: 380px;
-  outline: 2px solid tomato;
-}
-
-.photo-card img {
-  max-width: 100%;
+  // width: 380px;
+  // outline: 2px solid tomato;
 }
 
 .info {
@@ -81,7 +78,7 @@ p {
 }
 
 .info-item {
-  outline: 2px solid tomato;
+  // outline: 2px solid tomato;
   // padding: 5px 20px;
   text-align: center;
   width: 25%;
@@ -90,3 +87,26 @@ p {
 .no-visible {
   display: none;
 }
+
+.thumb {
+  // position: relative;
+  height: 250px;
+  width: 380px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 10px;
+
+box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06), 1px 4px 6px rgba(0, 0, 0, 0.16);
+}
+
+.thumb > img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+//  img {
+//   // max-width: 100%;
+//   object-fit: cover;
+// }
