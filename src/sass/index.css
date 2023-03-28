@@ -1,8 +1,31 @@
-@import './common';
-@import './example';
+@import '~node_modules/modern-normalize/modern-normalize.css';
+.example {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  line-height: 1.5;
+  background-color: #fff;
+  color: #2f2f37;
+  max-width: 960px;
+  padding: 16px;
+}
+
+.example code {
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #ff6b0a;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.example .background {
+  height: 240px;
+  background-image: url("../images/logo.png");
+  background-size: cover;
+  background-position: center;
+}
 
 /*----LINK AND LIST NONEDECORATION AND PADDINGS AND MARGINS----*/
-
 .link {
   text-decoration: none;
 }
@@ -25,7 +48,6 @@ p {
 }
 
 /*----POSITIONS FOR CONTAINERS----*/
-
 .container {
   max-width: 1200px;
   width: 100%;
@@ -35,7 +57,6 @@ p {
 }
 
 /*----MAIN COMPONENTS----*/
-
 .header {
   background-color: aqua;
   padding-top: 20px;
@@ -61,7 +82,6 @@ p {
 }
 
 /*----MAIN COMPONENTS----*/
-
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -82,11 +102,10 @@ p {
 
 .info-item {
   outline: 2px solid tomato;
-  // padding: 5px 20px;
   text-align: center;
   width: 25%;
 }
 
 .no-visible {
   display: none;
-}
+}/*# sourceMappingURL=index.css.map */
