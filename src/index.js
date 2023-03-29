@@ -30,6 +30,12 @@ let tempValue = '';
 // змінна в якій зберігаємо номер запиту наступної стоірнки
 let page = 1;
 
+// додаткова змінна знадобиться для безкінечного скролу
+// коли закінчуються картинки, то всеодно відбувається повідомлення, що картинки закінчились
+// тільки но картинки за запитом закінчуються  робимо цю змінну тру
+// і при першому ж новому запиті знову добимо фолс
+let secondRequestOutofData = false;
+
 //---------------ФУНКЦІЇ-СЛУХАЧІ---------------//
 
 form.addEventListener('submit', handleSearch);
@@ -55,6 +61,7 @@ async function handleSearch(event) {
     gallery.innerHTML = '';
     loadMore.classList.add('is-hidden');
     page = 1;
+    secondRequestOutofData = false;
     noRequestNotification();
     console.log('порожній запит');
     return;
@@ -70,6 +77,7 @@ async function handleSearch(event) {
     loadMore.classList.add('is-hidden');
     tempValue = request;
     page = 1;
+    secondRequestOutofData = false;
   }
 
   // тепер коли пройшли перевірки на пустий запит і нозве значення запиту
@@ -112,9 +120,10 @@ async function loadImages() {
     }
 
     // якщо це перший запит з таким словом виводимо повідомлення, що всі картинки уже виведені і збігів уже більше немає
-    if (page > 1) {
+    if (page > 1 && secondRequestOutofData === false) {
       endOfPicturesNotification();
       console.log('Збіги закінчилися');
+      secondRequestOutofData = true;
     }
   }
 
