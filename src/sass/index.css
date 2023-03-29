@@ -55,6 +55,10 @@ p {
   padding: 0 15px;
 }
 
+h1 {
+  text-align: center;
+}
+
 /*----MAIN COMPONENTS----*/
 .header {
   background-color: aqua;
@@ -66,6 +70,7 @@ p {
   background-color: orange;
   padding-top: 20px;
   padding-bottom: 20px;
+  text-align: center;
 }
 
 .layout {
@@ -76,7 +81,8 @@ p {
 .footer {
   background-color: aqua;
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 /*----MAIN COMPONENTS----*/

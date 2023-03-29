@@ -34,6 +34,10 @@ p {
   // outline: 2px solid tomato;
 }
 
+h1 {
+  text-align: center;
+}
+
 /*----MAIN COMPONENTS----*/
 
 .header {
@@ -46,6 +50,7 @@ p {
   background-color: orange;
   padding-top: 20px;
   padding-bottom: 20px;
+ text-align: center;
 }
 
 .layout {
@@ -57,7 +62,8 @@ p {
 .footer {
   background-color: aqua;
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 /*----MAIN COMPONENTS----*/
@@ -96,7 +102,8 @@ p {
   overflow: hidden;
   margin-bottom: 10px;
 
-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06), 1px 4px 6px rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06),
+    1px 4px 6px rgba(0, 0, 0, 0.16);
 }
 
 .thumb > img {

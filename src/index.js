@@ -33,7 +33,7 @@ let page = 1;
 //---------------ФУНКЦІЇ-СЛУХАЧІ---------------//
 
 form.addEventListener('submit', handleSearch);
-loadMore.addEventListener('click', loadMoreImages);
+loadMore.addEventListener('click', loadImages);
 
 //---------------ФУНКЦІЯ-ОБРОБНИК ПОШУКУ (SUBMIT ФОРМИ)---------------//
 
@@ -49,7 +49,8 @@ async function handleSearch(event) {
   // отримуємо значення введеного в поле пошуку тексту відкинувши пробіли напочатку і вкінці
   let request = searchQuery.value.trim();
 
-  // Якщо запит - порожнє поле, то очищаємо галерею, просимо ввести поле запиту і виходимо з функції
+  // Якщо запит - порожнє поле, то очищаємо галерею, прибираємо кнопку loadMore,
+  // скидаємо сторінку на 1, просимо ввести поле запиту і виходимо з функції
   if (request === '') {
     gallery.innerHTML = '';
     loadMore.classList.add('no-visible');
@@ -62,6 +63,7 @@ async function handleSearch(event) {
   // Якщо текст в полі інпут змінився після останнього запиту,
   // то обнуляємо виведені попередні результати, ховаємо кнопку loadMore
   // в змінну tempValue вносимо нове значення пошуку для наступної перевірки
+  // при повторному натисканні кнопки шукати
   // номер сторінки скидаємо на 1
   if (request !== tempValue) {
     gallery.innerHTML = '';
@@ -70,10 +72,18 @@ async function handleSearch(event) {
     page = 1;
   }
 
+  // тепер коли пройшли перевірки на пустий запит і нозве значення запиту
+  // можемо завантажувати картинки
+  loadImages();
+}
+
+//---------------ФУНКЦІЯ-ЗАВАНТАЖЕННЯ РЕЗУЛЬТАТІВ---------------// !!!!!!!!!
+
+async function loadImages() {
   // звернення до асинхронної функції getImagesList
   // передаємо запит і номер сторінки
   //і чекаємо, який прийде результат
-  let data = await getImagesList(request, page);
+  let data = await getImagesList(tempValue, page);
 
   // витягаємо масив обʼєктів наших картинок
   const arrayOfResults = data.hits;
@@ -86,16 +96,22 @@ async function handleSearch(event) {
 
     lightbox.refresh();
     loadMore.classList.remove('no-visible');
+
+    if (page === 1) {
+      numberOfResultsNotification(data.totalHits);
+    }
+    
+    page += 1;
   }
 
   // якщо масив порожній, то виводимо повідомлення, що збігів не знайдено
   if (arrayOfResults.length === 0) {
-    // якщо це перший запит з таким словом виводимо повідомлення, що збігів немає
+    // якщо це перший запит з таким словом виводимо повідомлення, що збігів взагалі немає
     if (page === 1) {
       noResultsNotification();
     }
 
-    // якщо це перший запит з таким словом виводимо повідомлення, що всі картинки уже виведені і збігів більше немає
+    // якщо це перший запит з таким словом виводимо повідомлення, що всі картинки уже виведені і збігів уже більше немає
     if (page > 1) {
       endOfPicturesNotification();
       console.log('Збіги закінчилися');
@@ -103,40 +119,7 @@ async function handleSearch(event) {
   }
 
   //збільшуємо номер сторінки
-  page += 1;
-}
-
-//---------------ФУНКЦІЯ-ЗАВАНТАЖЕННЯ ЩЕ РЕЗУЛЬТАТІВ---------------// !!!!!!!!!
-
-async function loadMoreImages() {
-  let data = await getImagesList(tempValue, page);
-  // витягаємо масив обʼєктів наших картинок
-  const arrayOfResults = data.hits;
-  console.log(arrayOfResults);
-  console.log(data.totalHits);
-
-  // якщо в масиві є обʼєкти картинок, то виводимо їх
-  if (arrayOfResults.length > 0) {
-    layOut(arrayOfResults);
-    lightbox.refresh();
-  }
-
-  // якщо масив порожній, то виводимо повідомлення, що збігів не знайдено
-  if (arrayOfResults.length === 0) {
-    // якщо це перший запит з таким словом виводимо повідомлення, що збігів немає
-    if (page === 1) {
-      noResultsNotification();
-    }
-
-    // якщо це перший запит з таким словом виводимо повідомлення, що всі картинки уже виведені і збігів більше немає
-    if (page > 1) {
-      endOfPicturesNotification();
-      console.log('Збіги закінчилися');
-    }
-  }
-
-  //збільшуємо номер сторінки
-  page += 1;
+  
 }
 
 //---------------ФУНКЦІЯ-ЗАПИТ КАРТИНОК НА СЕРВЕРІ---------------//
@@ -184,7 +167,7 @@ function layOut(data) {
 }
 
 //---------------ФУНКЦІЯ-ПОВІДОМЛЕННЯ ВІДСУТНОСТІ ЗБІГІВ ЗА ЗАПИТОМ---------------//
-
+// жовта
 function noResultsNotification() {
   Notiflix.Notify.warning(
     'Вибачте, збігів за ващим запитом не виявлено./Sorry, there are no images matching your search query. Please try again.',
@@ -194,7 +177,8 @@ function noResultsNotification() {
   );
 }
 
-//---------------ФУНКЦІЯ-ПОВІДОМЛЕННЯ КОЛИ ПУСТИЙ ЗАПИТ НА ПОШУК---------------// !!!!!!!!!!!
+//---------------ФУНКЦІЯ-ПОВІДОМЛЕННЯ КОЛИ ПУСТИЙ ЗАПИТ НА ПОШУК---------------// моя ініціатива
+// червона
 
 function noRequestNotification() {
   Notiflix.Notify.failure('Заповніть поле для пошуку ', {
@@ -203,10 +187,22 @@ function noRequestNotification() {
 }
 
 //---------------ФУНКЦІЯ-ПОВІДОМЛЕННЯ КОЛИ ЗАКІНЧИЛИСЯ КАРТИНКИ---------------//
-
+// синя
 function endOfPicturesNotification() {
+  loadMore.classList.add('no-visible'); // прибираємо кнопку завантажити ще
   Notiflix.Notify.info(
     "Більше збігів за запитом немає/ We're sorry, but you've reached the end of search results.",
+    {
+      timeout: 4000,
+    }
+  );
+}
+
+//---------------ФУНКЦІЯ-ПОВІДОМЛЕННЯ ПРИ ПЕРШОМУ ЗАПИТІ---------------//
+// синя
+function numberOfResultsNotification(quantity) {
+  Notiflix.Notify.info(
+    `Ми знайшли ${quantity} зображень. / Hooray! We found ${quantity} images.`,
     {
       timeout: 4000,
     }
