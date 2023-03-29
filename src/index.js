@@ -53,7 +53,7 @@ async function handleSearch(event) {
   // скидаємо сторінку на 1, просимо ввести поле запиту і виходимо з функції
   if (request === '') {
     gallery.innerHTML = '';
-    loadMore.classList.add('no-visible');
+    loadMore.classList.add('is-hidden');
     page = 1;
     noRequestNotification();
     console.log('порожній запит');
@@ -67,7 +67,7 @@ async function handleSearch(event) {
   // номер сторінки скидаємо на 1
   if (request !== tempValue) {
     gallery.innerHTML = '';
-    loadMore.classList.add('no-visible');
+    loadMore.classList.add('is-hidden');
     tempValue = request;
     page = 1;
   }
@@ -95,12 +95,12 @@ async function loadImages() {
     layOut(arrayOfResults);
 
     lightbox.refresh();
-    loadMore.classList.remove('no-visible');
+    loadMore.classList.remove('is-hidden');
 
     if (page === 1) {
       numberOfResultsNotification(data.totalHits);
     }
-    
+
     page += 1;
   }
 
@@ -119,7 +119,6 @@ async function loadImages() {
   }
 
   //збільшуємо номер сторінки
-  
 }
 
 //---------------ФУНКЦІЯ-ЗАПИТ КАРТИНОК НА СЕРВЕРІ---------------//
@@ -129,7 +128,7 @@ async function getImagesList(q, page) {
   const URL = 'https://pixabay.com/api/';
 
   const response = await fetch(
-    `${URL}?key=${key}&q=${q}&image_type=photo&orientation=horizontal&safesearch=true&per_page=3&page=${page}`
+    `${URL}?key=${key}&q=${q}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
   );
 
   const promice = response.json();
@@ -189,7 +188,7 @@ function noRequestNotification() {
 //---------------ФУНКЦІЯ-ПОВІДОМЛЕННЯ КОЛИ ЗАКІНЧИЛИСЯ КАРТИНКИ---------------//
 // синя
 function endOfPicturesNotification() {
-  loadMore.classList.add('no-visible'); // прибираємо кнопку завантажити ще
+  loadMore.classList.add('is-hidden'); // прибираємо кнопку завантажити ще
   Notiflix.Notify.info(
     "Більше збігів за запитом немає/ We're sorry, but you've reached the end of search results.",
     {
@@ -208,3 +207,40 @@ function numberOfResultsNotification(quantity) {
     }
   );
 }
+
+//---------------------------------------
+// ЩОСЬ ВЗАГАДІ НЕ ЗРОЗУМІВ ЩО ЦЕЙ ФУНКЦІОНАЛ МАЄ РОБИТИ
+
+//Прокручування сторінки
+// Зробити плавне прокручування сторінки після запиту і відтворення кожної
+// наступної групи зображень.Ось тобі код - підказка, але розберися у ньому самостійно.
+
+// const { height: cardHeight } = document
+//   .querySelector('.gallery')
+//   .firstElementChild.getBoundingClientRect();
+
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: 'smooth',
+// });
+
+//---------------БЕЗКІНЕЧНИЙ СКРОЛЛ---------------//
+
+// підключаю виклик функції тільки через 300 мс після закінчення скролу, 
+// а то функція без нього викликається по кілька разів
+import debounce from 'lodash.debounce';
+// затримка 300 мс
+const DEBOUNCE_DELAY = 300;
+
+//функція-слухач скролу
+window.addEventListener(
+  'scroll',
+  debounce(() => {
+    //змінна зберігає координати нашого документа, які потрапили у вйю-порт
+    const documentRect = document.documentElement.getBoundingClientRect();
+    // за двісті пікселів до кінця нашого документа викличемо ф-ію загрузки картинок
+    if (documentRect.bottom < document.documentElement.clientHeight + 200) {
+      loadImages();
+    }
+  }, DEBOUNCE_DELAY)
+);
