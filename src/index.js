@@ -92,9 +92,12 @@ async function loadImages() {
   // передаємо запит і номер сторінки
   //і чекаємо, який прийде результат
   let data = await getImagesList(tempValue, page);
-
+  console.log(data);
   // витягаємо масив обʼєктів наших картинок
   const arrayOfResults = data.hits;
+
+  // const arrayOfResults = await getImagesList(tempValue, page);
+
   console.log(arrayOfResults);
   console.log(data.totalHits);
 
@@ -132,22 +135,11 @@ async function loadImages() {
 
 //---------------ФУНКЦІЯ-ЗАПИТ КАРТИНОК НА СЕРВЕРІ---------------//
 
-async function getImagesList(q, page) {
-  const key = '34781743-09d11a08c8aa729d147b2c9f6';
-  const URL = 'https://pixabay.com/api/';
-
-  const response = await fetch(
-    `${URL}?key=${key}&q=${q}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
-  );
-
-  const promice = response.json();
-  // console.log('promice', promice);
-  return promice;
-}
+import getImagesList from './get-images-request';
 
 //---------------ФУНКЦІЯ-ВЕРСТКА РЕЗУЛЬТАТУ---------------//
 
-function layOut(data) {
+ function layOut(data) {
   let marrkup = data
     .map(
       item =>
